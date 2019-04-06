@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.geetmeena.music.MainActivity"
+    
+    >
+
+
+    <item
+
+        android:id="@+id/horizontal"
+        android:checkable="true"
+
+        android:enabled="true"
+        android:title="HorizontelScroll"
+
+        android:visible="true" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+
+</menu>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.geetmeena.music.FullScreen"
+    android:background="@drawable/fullscreenim"
+    >
+   <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"
+
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignParentTop="true"
+
+        android:layout="@layout/app_bar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+
+    <ImageView
+        android:layout_below="@+id/app_bar"
+        android:id="@+id/image2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="114dp"
+        android:background="@drawable/fullscreenim"
+        />
+
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        style="@style/Widget.AppCompat.SeekBar"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/back"
+        android:layout_marginBottom="12dp"
+        android:layout_toEndOf="@+id/textView4"
+        android:layout_toStartOf="@+id/textView3"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/backpnn"
+        android:onClick="onClick"
+        android:layout_marginLeft="16dp"
+
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <Button
+
+        android:id="@+id/play1"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/seekBar"
+        android:layout_marginStart="11dp"
+        android:layout_toEndOf="@+id/back"
+        android:onClick="onClick"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+
+        android:layout_below="@+id/seekBar"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/play1"
+        android:background="@drawable/nextpnn"
+        android:onClick="onClick"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        tools:ignore="UnknownId" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBar"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBar"
+        android:layout_alignEnd="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/seekBar"
+        android:layout_alignParentEnd="true"
+        android:text="00:00" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/seekBar"
+        android:text="00:00" />
+
+
+
+
+</RelativeLayout>
