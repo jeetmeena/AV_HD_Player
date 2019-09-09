@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-class ViewReso {
+public class ViewReso {
 
     private Button buttonplay;
    private   Button buttonnext;

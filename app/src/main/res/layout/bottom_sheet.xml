@@ -36,7 +36,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                    android:layout_margin="10dp"
-                    android:background="@drawable/ashok_galaxyn"
+                    android:background="@drawable/defaultd2"
                     android:scaleType="fitXY"
                     android:id="@+id/bottom_image"
 
@@ -118,9 +118,10 @@
                 android:id="@+id/image2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/ashok_galaxyn"
+                android:background="@drawable/defaultd"
                 android:scaleType="fitXY"
-                />
+                 />
+
 
 
         </RelativeLayout>

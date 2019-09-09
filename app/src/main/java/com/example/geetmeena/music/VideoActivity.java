@@ -2,7 +2,6 @@ package com.example.geetmeena.music;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.FragmentManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,11 +10,10 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -25,7 +23,6 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,40 +33,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
-import android.webkit.WebChromeClient;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geetmeena.music.Model.CommonVideo;
+import com.example.geetmeena.music.fragment.VideoFragment;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-
-import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-
-
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -146,8 +133,15 @@ public class VideoActivity extends AppCompatActivity implements GestureDetector.
 
         controlerAboveBottom=findViewById(R.id.controlerAboveBottom);
            a=0;
-         VideoFragment videoFragment=VideoFragment.getVideoFragment();
-         videoArrayListi=videoFragment.videosList;
+          if (intent.getIntExtra("key",12) == 1) {
+              VideoFragment videoFragment=VideoFragment.getVideoFragment();
+              videoArrayListi=videoFragment.videosList;
+          }
+
+          else if(intent.getIntExtra("key",12)==0){
+             FolderVideosActivity folderVideosActivity= FolderVideosActivity.getFolderVideosActivity();
+              videoArrayListi=folderVideosActivity.videosList;
+          }
          recyclerView=findViewById(R.id.video_recyclerView_list);
          recyclerView.setVisibility(View.VISIBLE);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -925,9 +919,3 @@ public class VideoActivity extends AppCompatActivity implements GestureDetector.
         super.onBackPressed();
     }
 }
-/*@Override
-      public boolean onTouchEvent(MotionEvent event) {
-          this.mDetector.onTouchEvent(event);
-          return super.onTouchEvent(event);
-      }
-      */

@@ -1,19 +1,11 @@
 package com.example.geetmeena.music;
 
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaDescriptionCompat;
@@ -21,8 +13,9 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
-import android.widget.Toast;
+
+import com.example.geetmeena.music.Model.CommonModel;
+import com.example.geetmeena.music.Service.MediaPlayerService;
 
 public class MediaNotificationManager extends BroadcastReceiver {
     private static final int NOTIFICATION_ID = 412;
@@ -163,7 +156,7 @@ public class MediaNotificationManager extends BroadcastReceiver {
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
                 .setSubText(description.getDescription())
-                .setLargeIcon(CommonModel.getAudioImageBitMap( description.getMediaId()))
+                .setLargeIcon(CommonModel.getAudioImageBitMap(description.getMediaId()))
 
                 // Enable launching the player by clicking the notification
                 .setContentIntent(createContentIntent())

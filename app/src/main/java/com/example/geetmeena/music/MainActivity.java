@@ -3,8 +3,6 @@ package com.example.geetmeena.music;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
-import android.content.ComponentCallbacks;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,37 +11,31 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -56,22 +48,27 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geetmeena.music.Model.CommonModel;
+import com.example.geetmeena.music.Model.CommonVideo;
+import com.example.geetmeena.music.Service.ReadExtStoregData;
+import com.example.geetmeena.music.fragment.AudioFragment;
+import com.example.geetmeena.music.fragment.BlankFragment;
+import com.example.geetmeena.music.fragment.MyMediaPlayer;
+import com.example.geetmeena.music.fragment.VideoFolderFragment;
+import com.example.geetmeena.music.fragment.VideoFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class MainActivity extends AppCompatActivity implements MainActivitya, DrawerLayout.DrawerListener,
         NavigationView.OnNavigationItemSelectedListener,ActionBar.TabListener {
@@ -86,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     Button but;
     public static int count = 0;
-    Button bottomPlay;
+    public Button bottomPlay;
     ///public Button bottom_song_list;
     Button start;
     NavigationView navigationView;
@@ -152,18 +149,14 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
        // toolbar = findViewById(R.id.app_bar);
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         viewPager=findViewById(R.id.pager);
-        
-        intentFilter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
-        myNoisyAudioStreamReceiver = new  BecomingNoisyReceiver();
+       // intentFilter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
+        //myNoisyAudioStreamReceiver = new  BecomingNoisyReceiver();
 
-        //seekBar.setOnSeekBarChangeListener(this);
-       // buttonplay.setBackgroundResource(R.drawable.pausepnn);
          viewResos=new ArrayList<>();
          getAllSongPath=new ArrayList<>();
          getAllVideoPath=new ArrayList<>();
         Toast.makeText(this,"01"+aaaID, Toast.LENGTH_SHORT).show();
-        //viewResos.add(new ViewReso(imageView,songName,artistName,songDuretion,seekDuretoin1,seekBar));
-        viewsList= new View[]{};
+         viewsList= new View[]{};
          //setViewList();
         setSupportActionBar(toolbar);//import android.support.v7.widget.Toolbar*** if use Toolbar Layout android.support.v7.widget.Toolbar;
         ActionBar actionbar = getSupportActionBar();
@@ -185,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
         bottomTitle= findViewById(R.id.bottom_Title);
         String s="giu";
         bottomTitle.setText(s);
-        imageView.setImageResource(R.drawable.ashok_galaxyn);
+        imageView.setImageResource(R.drawable.defaultd);
         artistName= findViewById(R.id.textView2);
         songDuretion= findViewById(R.id.textView3);
         //songDuretion.setText("00.0");
@@ -214,21 +207,13 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
         recyclerView = findViewById(R.id.recycler_view);
          recyclerView.setHasFixedSize(true);
         start=findViewById(R.id.start);
-        //fab = findViewById(R.id.fab);
-        //fabCancel= findViewById(R.id.fabcancel);
-        //fab.setBackgroundResource(R.drawable.playpnn);
-        //fabCancel.setEnabled(false);
-        //fabCancel.setBackgroundColor(Color.TRANSPARENT);
-         //songListsName=new String[]{"0001441"};
-        //fab.setVerticalScrollBarEnabled(true);
+
          instance=this;
          context=this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setStatusBarColor();
         }
-        //import com.melnykov.fab.FloatingActionButton ***;
 
-        //getNameOFSongLists();
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -252,9 +237,6 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
                         });
                 // Create the AlertDialog object
                 builder.create();
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
 
 
             } else {
@@ -264,12 +246,11 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_SETTINGS  },
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-               // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+
             }
         }else {
-            runThread();
+            AsyincReadFile asyincReadFile=new AsyincReadFile(this);
+            asyincReadFile.execute();
             setViewPager(viewPager);
 
         }
@@ -277,37 +258,70 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
         int a=   intent.getIntExtra("key",0);
         if(a==1){
            selected=intent.getIntegerArrayListExtra("selected");
-          // saveArrayList(selected,"selected");
 
         }
        }catch(Exception e){
 
        }
 
-        //IntentFilter commandFilter = new IntentFilter();
-        //commandFilter.addAction(Intent.ACTION_HEADSET_PLUG);
 
-
-        registerReceiver( myNoisyAudioStreamReceiver, intentFilter );
+       // registerReceiver( myNoisyAudioStreamReceiver, intentFilter );
              //registerComponentCallbacks((ComponentCallbacks) callback);
-        //onClick();
-        //context.startService(new Intent(context, BecomingNoisyReceiver.class));
+
+    }
+
+    class AsyincReadFile extends AsyncTask<Void,Void,Void>{
+        MyAppDataBase myAppDataBase;
+        ArrayList<CommonModel> commonModelArrayList;
+         public AsyincReadFile(Context context){
+             myAppDataBase=new MyAppDataBase(context,"lastSongWasPlayed.db",null,1);
+         }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+         Cursor cursor=    myAppDataBase.getAllSongLists();
+          if(cursor.getCount()>0&&cursor.moveToFirst()){
+              do {
+
+                  count++;
+                  //myAppDataBase.isertReadSongLists(id,data,album,artist,duretion,titel,name,a);
+                 // musicPathArrList.add(new CommonModel(titel, artist, album, duretion, data, id, name, count,a));
+                  String id = cursor.getString(0);
+                  String data = cursor.getString(1);
+                  String album = cursor.getString(2);
+                  String artist = cursor.getString(3);
+                  String duretion = cursor.getString(4);
+                  String titr1 = cursor.getString(5);
+                  String name= cursor.getString(6);
+                  byte[] a=cursor.getBlob(7);
+                  new CommonModel(titr1, artist, album, duretion, data, id, name,count,a);
+
+              } while (cursor.moveToNext());
+          }else {
+              ReadExtStoregData readExtStoregData=new ReadExtStoregData(MainActivity.this);
+              readExtStoregData.AllMusicPathList();
+              readExtStoregData.getAllVideo();
+          }
+
+               cursor.close();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+           Toast.makeText(context, ""+count, Toast.LENGTH_SHORT).show();
+            super.onPostExecute(aVoid);
+            ReadExtStoregData readExtStoregData=new ReadExtStoregData(MainActivity.this);
+            readExtStoregData.AllMusicPathList();
+        }
     }
 
 
-
     public  void  runThread(){
-        new Thread(
-                 new Runnable() {
-            @Override
-            public void run() {
-              AllMusicPathList();
-              //getAllVideoPath= getAllVideoList();
-                //setViewPager(viewPager);
+        ReadExtStoregData readExtStoregData=new ReadExtStoregData(this);
+        readExtStoregData.AllMusicPathList();
+        readExtStoregData.getAllVideo();
 
-            }
-        }
-        ).start();
 
     }
 
@@ -324,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
     public   class BecomingNoisyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            MyMediaPlayer  jeet1 = new MyMediaPlayer();
+            MyMediaPlayer jeet1 = new MyMediaPlayer();
 
 
             if (AudioManager.ACTION_HEADSET_PLUG.equals(intent.getAction())) {
@@ -339,8 +353,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
                       }catch (Exception e){}
                         break;
                     case 1:
-                        Toast.makeText(context, "headphone plugIn", Toast.LENGTH_SHORT).show();
-                        //audioManager.setSpeakerphoneOn(false);
+
                         break;
                     default:
                         //audioManager.setSpeakerphoneOn(true);
@@ -351,11 +364,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
         }
     }
 
-    public void notiFication(){
 
-       // Toast.makeText(this, "service", Toast.LENGTH_SHORT).show();
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -381,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
     @Override
     protected void onDestroy() {
         //unregisterComponentCallbacks((ComponentCallbacks) callback);
-        unregisterReceiver(myNoisyAudioStreamReceiver);
+       // unregisterReceiver(myNoisyAudioStreamReceiver);
         super.onDestroy();
     }
 
@@ -389,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
         return mContext;
     }
     public void setViewList(){
-      SolventRecyclerViewAdapter vv=new SolventRecyclerViewAdapter(context,null,null);
+      //SolventRecyclerViewAdapter vv=new SolventRecyclerViewAdapter(context,null,null);
       // vv.getResurs(viewsList);
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
     }
@@ -403,7 +412,9 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
     public void setViewPager(ViewPager viewPager){
     ScreenSlidePagerAdapter adapter =new ScreenSlidePagerAdapter(getSupportFragmentManager());
     adapter.addFragment(new AudioFragment("hii",context,viewResos),"Audio");
-    adapter.addFragment(new VideoFragment("hii",context),"Video");
+    adapter.addFragment(new VideoFragment("hii",context),"Videos");
+    adapter.addFragment(new VideoFolderFragment(    "hii",context),"Video Folder");
+
     adapter.addFragment(new BlankFragment("hii",context),"Blank");
     viewPager.setAdapter(adapter);
     }
@@ -445,9 +456,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         final int id = item.getItemId();
          switch (id){
              case android.R.id.home:
@@ -495,7 +504,8 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
 
       // fab.setColorNormal(R.color.fab_material_teal_900);
         try {
-            gaggeredList = AllMusicPathList();
+            ReadExtStoregData readExtStoregData=new ReadExtStoregData(this);
+            gaggeredList = readExtStoregData.AllMusicPathList();
 
 
             try {
@@ -504,9 +514,9 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
                 toast.show();
 
                 // fab.setRippleColor(R.color.fab_material_amber_500);
-                SolventRecyclerViewAdapter rcAdapter = new SolventRecyclerViewAdapter(MainActivity.this, gaggeredList,null);
+                //SolventRecyclerViewAdapter rcAdapter = new SolventRecyclerViewAdapter(MainActivity.this, gaggeredList,null);
 
-                recyclerView.setAdapter(rcAdapter);
+                //recyclerView.setAdapter(rcAdapter);
                 //onClick(fabCancel);
                 start.setEnabled(false);
             } catch (Exception e) {
@@ -570,100 +580,6 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
 
     }
 
-    @SuppressLint("ResourceAsColor")
-    public  ArrayList<CommonModel> AllMusicPathList() {
-        ArrayList<CommonModel> musicPathArrList = new ArrayList<>();
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-        String[] projection = {
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.DURATION,
-                MediaStore.Audio.Media.DATA,    // filepath of the audio file
-                MediaStore.Audio.Media._ID,     // context id/ uri id of the file
-                MediaStore.Audio.Media.DISPLAY_NAME,
-
-
-        };
-        byte[] art;
-        Bitmap audioView = null;
-        MediaMetadataRetriever metaRetriver = new MediaMetadataRetriever();
-        Uri songUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-
-        Cursor cursorAudio = getContentResolver().query(songUri, projection, selection, null, MediaStore.Audio.Media.DISPLAY_NAME);
-        if (cursorAudio != null && cursorAudio.moveToFirst()) {
-
-            //Cursor cursorAlbum;
-
-            String jeet = null;
-
-            try {
-
-
-                // if ( cursorAudio.moveToFirst()) {
-                do {
-
-                    count++;
-                    // Long albumId = Long.valueOf(cursorAudio.getString(cursorAudio.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
-                    //cursorAlbum = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                    //new String[]{MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                    // MediaStore.Audio.Albums._ID + "=" + albumId, null, null);
-
-                    String titel = cursorAudio.getString(0);
-                    String artist = cursorAudio.getString(1);
-                    String album = cursorAudio.getString(2);
-                    String duretion = cursorAudio.getString(3);
-                    String data = cursorAudio.getString(4);
-                    String id = cursorAudio.getString(5);
-                    String name = cursorAudio.getString(6);
-
-                    //   String  uri=cursorAudio.getExtras();
-                     /*   try{
-                          audioView=  audioImage(data);
-                           jeet =String.valueOf(audioView);
-                        }catch(Exception e){
-                            Toast toast1=Toast.makeText(this,"hii jeet2",Toast.LENGTH_SHORT);
-                        }*/
-
-
-                    musicPathArrList.add(new CommonModel(titel, artist, album, duretion, data, id, name, count));
-
-                } while (cursorAudio.moveToNext());
-                //  }
-
-
-            } catch (Exception e) {
-                Log.e("rtuio", e.getMessage());
-                Toast toast1 = Toast.makeText(this, "hii jeet2", Toast.LENGTH_SHORT);
-                toast1.show();
-
-            }
-
-
-        }
-        cursorAudio.close();
-        return musicPathArrList;
-    }
-
-    @SuppressLint("ResourceAsColor")
-    public void audioImage(String data) {
-        MediaMetadataRetriever mediaMetadata = new MediaMetadataRetriever();
-        byte[] art;
-        ImageView audioView1 = null;
-        Bitmap songImage = null;
-
-
-
-        mediaMetadata.setDataSource(data);
-        try {
-            art = mediaMetadata.getEmbeddedPicture();
-            songImage = BitmapFactory.decodeByteArray(art, 0, art.length);
-
-
-        } catch (Exception e) {
-            songImage = BitmapFactory.decodeResource(getResources(), R.drawable.pausepnn);
-        }
-    }
 
 
 
@@ -679,12 +595,7 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
 
 
             case R.id.allSongLists:
-                NavUtils.navigateUpFromSameTask(this);
-
-
-                ArrayList<String> list =getArrayList("key1");
-                SelectedList selectedList=new SelectedList(context,list,0);
-                Toast.makeText(this, "Send"+list, Toast.LENGTH_SHORT).show();
+              //  NavUtils.navigateUpFromSameTask(this);
 
             case R.id.favoritSong: ;
 
@@ -704,14 +615,14 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
 
     @Override
     public void onDrawerOpened(View drawerView) {
-        Toast toast1 = Toast.makeText(this, "hii opened", Toast.LENGTH_SHORT);
-        toast1.show();
+        //Toast toast1 = Toast.makeText(this, "hii opened", Toast.LENGTH_SHORT);
+        //toast1.show();
     }
 
     @Override
     public void onDrawerClosed(View drawerView) {
-        Toast toast1 = Toast.makeText(this, "hii closed", Toast.LENGTH_SHORT);
-        toast1.show();
+       // Toast toast1 = Toast.makeText(this, "hii closed", Toast.LENGTH_SHORT);
+        //toast1.show();
     }
 
     @Override
@@ -871,19 +782,16 @@ public class MainActivity extends AppCompatActivity implements MainActivitya, Dr
 
                    case BottomSheetBehavior.STATE_COLLAPSED:
                       // Toast.makeText(context, "Collapsed " , Toast.LENGTH_SHORT).show();
-                       // fab.setVisibility(View.VISIBLE);
-                       // fab.startAnimation(growAnimation);
+
                        bottomPlay.setVisibility(View.VISIBLE);
                        bottomTitle.setSelected(false);
-                       //bottom_song_list.setVisibility(View.GONE);
-                       break;
+                        break;
 
                    case BottomSheetBehavior.STATE_EXPANDED:
                       // Toast.makeText(context, "expanded " , Toast.LENGTH_SHORT).show();
                        bottomPlay.setVisibility(View.GONE);
                        bottomTitle.setSelected(true);;
-                     //  bottom_song_list.setVisibility(View.VISIBLE);
-                       break;
+                         break;
 
                    case BottomSheetBehavior.STATE_SETTLING:
                        //Toast.makeText(context, "settling" , Toast.LENGTH_SHORT).show();

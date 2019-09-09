@@ -10,6 +10,8 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.widget.Toast;
 
+import com.example.geetmeena.music.Model.CommonModel;
+
 import java.io.IOException;
 
 class PlaybackManager implements AudioManager.OnAudioFocusChangeListener, MediaPlayer.OnCompletionListener {

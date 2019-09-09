@@ -14,7 +14,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@mipmap/musiclogo" />
+        android:src="@mipmap/icon_" />
 
     <TextView
         android:id="@+id/textView5"

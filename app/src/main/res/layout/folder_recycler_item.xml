@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_marginRight="2dp"
+    android:background="@android:drawable/gallery_thumb"
+    >
+    <ImageView
+        android:id="@+id/perviewFolder1"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:layout_marginEnd="60dp"
+
+        />
+    <ImageView
+        android:id="@+id/perviewFolder2"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:layout_marginEnd="40dp"
+
+        />
+    <ImageView
+        android:id="@+id/perviewFolder3"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:layout_marginEnd="20dp"
+        />
+    <TextView
+        android:id="@+id/folderName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:background="@android:color/white"
+        android:text="sdgs"
+        />
+
+</RelativeLayout>

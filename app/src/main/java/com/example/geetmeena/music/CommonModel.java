@@ -163,14 +163,14 @@ public class CommonModel {
             if (songImage==null){
                 //mainActivity.imageView.setImageResource(R.drawable.fullscreenim);
                 //mainActivity.bottomSheetImageView.setImageResource(R.drawable.fullscreenim);
-                songImage= BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.ashok_galaxyn);
+                songImage= BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.defaultd);
 
             }
 
         }catch (Exception e){
 
             //audioView1.setBackgroundColor(R.color.fab_material_amber_500);
-            songImage= BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.ashok_galaxyn);
+            songImage= BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.defaultd);
         }
         return  songImage;
     }
